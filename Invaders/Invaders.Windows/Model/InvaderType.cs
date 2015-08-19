@@ -6,13 +6,9 @@ using System.Text;
 namespace Invaders.Model
 {
     /// <summary>
-    /// Move directions
+    /// Types of invaders
     /// </summary>
-	enum Direction
-	{
-		Left,
-		Right,
-		Up,
-		Down,
-	} 
+    enum InvaderType
+    {
+    }
 }

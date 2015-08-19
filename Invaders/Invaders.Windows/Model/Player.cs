@@ -31,7 +31,7 @@ namespace Invaders.Model
         /// <summary>
         /// Moves player ship to the left or right.
         /// </summary>
-        /// <param name="direction">Movement direction.</param>
+        /// <param name="direction">Move direction.</param>
         public override void Move(Direction direction)
         {
             double newX;
