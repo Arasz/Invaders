@@ -104,11 +104,18 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Folder Include="ViewModel\" />
+    <Folder Include="View\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Direction.cs" />
+    <Compile Include="Model\Invader.cs" />
+    <Compile Include="Model\InvadersModel.cs" />
+    <Compile Include="Model\Player.cs" />
+    <Compile Include="Model\Ship.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -118,10 +125,36 @@
     <None Include="Invaders.Windows_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\block.png" />
+    <Content Include="Assets\bug1.png" />
+    <Content Include="Assets\bug2.png" />
+    <Content Include="Assets\bug3.png" />
+    <Content Include="Assets\bug4.png" />
+    <Content Include="Assets\flyingsaucer1.png" />
+    <Content Include="Assets\flyingsaucer2.png" />
+    <Content Include="Assets\flyingsaucer3.png" />
+    <Content Include="Assets\flyingsaucer4.png" />
     <Content Include="Assets\Logo.scale-100.png" />
+    <Content Include="Assets\player.png" />
+    <Content Include="Assets\satellite1.png" />
+    <Content Include="Assets\satellite2.png" />
+    <Content Include="Assets\satellite3.png" />
+    <Content Include="Assets\satellite4.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
+    <Content Include="Assets\spaceship1.png" />
+    <Content Include="Assets\spaceship2.png" />
+    <Content Include="Assets\spaceship3.png" />
+    <Content Include="Assets\spaceship4.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\star1.png" />
+    <Content Include="Assets\star2.png" />
+    <Content Include="Assets\star3.png" />
+    <Content Include="Assets\star4.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\watchit1.png" />
+    <Content Include="Assets\watchit2.png" />
+    <Content Include="Assets\watchit3.png" />
+    <Content Include="Assets\watchit4.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainPage.xaml">
