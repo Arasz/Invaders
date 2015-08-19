@@ -15,7 +15,8 @@ namespace Invaders.Model
         /// <summary>
         /// Player size in pixels.
         /// </summary>
-        static public readonly Size PlayerSize { get; private set; }
+        static readonly private Size _playerSize = new Size(25,15);
+        static public Size PlayerSize { get { return _playerSize; } }
 
         /// <summary>
         /// Movement speed.
@@ -24,7 +25,7 @@ namespace Invaders.Model
 
         public Player(Point location, Size size):base(location,size)
         {
-            PlayerSize = Size;
+            Size = _playerSize;
         }
 
         /// <summary>
@@ -33,17 +34,19 @@ namespace Invaders.Model
         /// <param name="direction">Movement direction.</param>
         public override void Move(Direction direction)
         {
+            double newX;
+
             switch (direction)
             {
                 case Direction.Left:
-                    double newX = Location.X - _speed;
+                    newX = Location.X - _speed;
 
                     if (( newX > PlayerSize.Width/2)) // Movement in the left direction only decreases x coordinate
                         Location = new Point(newX, Location.Y);
                     break;
                 case Direction.Right:
                     double playAreaWidth = InvadersModel.PlayAreaSize.Width;
-                    double newX = Location.X + _speed;
+                    newX = Location.X + _speed;
 
                     if (newX < playAreaWidth - PlayerSize.Width / 2) 
                         Location = new Point(newX, Location.Y);

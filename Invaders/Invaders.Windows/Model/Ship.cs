@@ -10,7 +10,7 @@ namespace Invaders.Model
     /// <summary>
     /// Abstract ship representation.
     /// </summary>
-    class Ship
+    abstract class Ship
     {
         /// <summary>
         /// Ship location.

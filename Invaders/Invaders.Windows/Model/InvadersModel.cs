@@ -9,7 +9,8 @@ namespace Invaders.Model
 {
     class InvadersModel
     {
-        public static readonly Size PlayAreaSize { get; private set; }
+        private static readonly Size _playAreaSize;
+        public static Size PlayAreaSize { get{ return _playAreaSize;} }
 
     }
 }
