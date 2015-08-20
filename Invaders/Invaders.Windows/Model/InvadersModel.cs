@@ -156,7 +156,14 @@ namespace Invaders.Model
             // Create new game objects
             AddNewStars(InitialStarCount);
             _player = new Player(_playerInitialLocation, Player.PlayerSize);
+            Lives = 2;
+            Wave = 0;
+            AddNewInvadersWave();
+        }
 
+        private void AddNewInvadersWave()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
