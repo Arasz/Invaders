@@ -64,6 +64,11 @@ namespace Invaders.Model
         public const int InitialStarCount = 50;
 
         /// <summary>
+        /// Player location at the beginning of new game (in the center of play area bottom)
+        /// </summary>
+        private readonly Point _playerInitialLocation = new Point(150, Player.PlayerSize.Height / 2); //HACK: Redundant variable?
+
+        /// <summary>
         /// Random number generator
         /// </summary>
         private readonly Random _random = new Random();
@@ -130,10 +135,53 @@ namespace Invaders.Model
         /// </summary>
         public void StartGame()
         {
+            // Clear game objects
             GameOver = false;
+            foreach (Invader invader in _invaders)
+                OnShipChanged(invader, true); //TODO: Check if killed parameter really should be true
             _invaders.Clear();
+
+            foreach (Shot invadersShot in _invaderShots)
+                OnShotMoved(invadersShot, true);
             _invaderShots.Clear();
+
+            foreach (Shot playerShot in _playerShots)
+                OnShotMoved(playerShot, true);
             _playerShots.Clear();
+
+            foreach (var star in _stars)
+                OnStarChanged(star, true);
+            _stars.Clear();
+            
+            // Create new game objects
+            AddNewStars(InitialStarCount);
+            _player = new Player(_playerInitialLocation, Player.PlayerSize);
+
+        }
+
+        /// <summary>
+        /// Adds new stars to the stars collection
+        /// </summary>
+        /// <param name="starsAmount">Stars number</param>
+        private void AddNewStars(int starsAmount)
+        {
+            for (int i = 0; i < starsAmount; i++)
+            {
+                _stars.Add(RandomPointsFactory());
+                OnStarChanged(_stars.Last(), false);
+            }
+        }
+
+        /// <summary>
+        /// Creates random point inside game play area
+        /// </summary>
+        /// <returns>Point inside game area</returns>
+        private Point RandomPointsFactory() //TODO: Move to the helper class
+        {
+            int epsilon = 0; // Defines minimum distance from play area "frame"
+            double x = _random.Next(epsilon,(int)PlayAreaSize.Width-epsilon);
+            double y = _random.Next(epsilon,(int)PlayAreaSize.Height-epsilon);
+            return new Point(x, y);
         }
 
         /// <summary>
