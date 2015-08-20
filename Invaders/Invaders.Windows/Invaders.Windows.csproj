@@ -117,6 +117,10 @@
     <Compile Include="Model\InvaderType.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Ship.cs" />
+    <Compile Include="Model\ShipChangedEventArgs.cs" />
+    <Compile Include="Model\Shot.cs" />
+    <Compile Include="Model\ShotMovedEventArgs.cs" />
+    <Compile Include="Model\StarChangedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

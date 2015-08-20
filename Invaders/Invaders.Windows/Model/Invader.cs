@@ -12,8 +12,12 @@ namespace Invaders.Model
     /// </summary>
     class Invader:Ship
     {
+        /// <summary>
+        /// Movement speed
+        /// </summary>
         private static readonly double _speed = 10; 
 
+        // TODO: Check if this is correct implementation
         private static readonly Size _invaderSize = new Size(15,25);
         /// <summary>
         /// Returns default invader size
@@ -56,12 +60,12 @@ namespace Invaders.Model
                     if (newCoordinate < (InvadersModel.PlayAreaSize.Width - Size.Width/2))
                         Location = new Point(newCoordinate, Location.Y);
                     break;
-                case Direction.Up:
+                case Direction.Down:
                     newCoordinate = Location.Y + _speed;
                     if (newCoordinate > (InvadersModel.PlayAreaSize.Height - Size.Height / 2))
                         Location = new Point(Location.X, newCoordinate);
                     break;
-                case Direction.Down:
+                case Direction.Up:
                     newCoordinate = Location.Y - _speed;
                     if (newCoordinate > Size.Height / 2)
                         Location = new Point(Location.X, newCoordinate);

@@ -10,5 +10,10 @@ namespace Invaders.Model
     /// </summary>
     enum InvaderType
     {
+        Bug,
+        Saucer,
+        Satellite,
+        Spaceship,
+        Star,
     }
 }
