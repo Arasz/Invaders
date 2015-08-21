@@ -191,6 +191,80 @@ namespace Invaders.Model
             }
         }
 
+        /// <summary>
+        /// Moves player ship
+        /// </summary>
+        public void MovePlayer(Direction direction)
+        {
+            if (PlayerDying)
+                return;
+            else
+            {
+                _player.Move(direction);
+                OnShipChanged(_player, false);
+            }
+        }
+
+        /// <summary>
+        /// Randomly adds or removes one star
+        /// </summary>
+        public void Twinkle()
+        {
+            var starsCounter = _stars.Count();
+            // Amount of stars must be in (15% of initial value, 150% of initial value) interval
+            if ((starsCounter+1<(1.5*InitialStarCount))&&(starsCounter-1>(0.15*InitialStarCount)))
+            {
+                if (_random.Next(0, 2) == 0)
+                    _stars.RemoveAt(_random.Next(0, starsCounter));
+                else
+                    _stars.Add(RandomPointFactory());
+            }
+        }
+
+        /// <summary>
+        /// Core game method. Updates state of the game.
+        /// </summary>
+        public void Update()
+        {
+            Twinkle(); // Stars always twinkle 
+            if(!GameOver)
+            {
+                // Check if there is any invader ship. If not, create new wave
+                if(!_invaders.Any())
+                {
+                    Wave++;
+                    AddNewInvadersWave();
+                }
+                // Check if player is alive
+                if(!PlayerDying)
+                {
+                    //TODO: Move invaders ships
+
+                    // Move all shots
+                    Rect playAreaRect = new Rect(new Point(0, 0), PlayAreaSize);
+                    foreach (var shot in _playerShots)
+                    {
+                        shot.Move();
+                        if (!playAreaRect.Contains(shot.Location))
+                            _playerShots.Remove(shot);
+                        OnShotMoved(shot, false);
+                    }
+                    foreach (var shot in _invaderShots)
+                    {
+                        shot.Move();
+                        if (!playAreaRect.Contains(shot.Location))
+                            _invaderShots.Remove(shot);
+                        OnShotMoved(shot, false);
+                    }
+
+                    //TODO: Invaders are shooting at player
+
+
+                }
+
+            }
+        }
+
         #region Private helper methods
         // TODO: ADD THIS TO HELPER CLASS
         /// <summary>
