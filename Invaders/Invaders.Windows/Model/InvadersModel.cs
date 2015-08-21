@@ -64,6 +64,11 @@ namespace Invaders.Model
         public const int InitialStarCount = 50;
 
         /// <summary>
+        /// Number of invaders in one wave
+        /// </summary>
+        private const int _invadersAmount = 66;
+
+        /// <summary>
         /// Player location at the beginning of new game (in the center of play area bottom)
         /// </summary>
         private readonly Point _playerInitialLocation = new Point(150, Player.PlayerSize.Height / 2); //HACK: Redundant variable?
@@ -161,9 +166,28 @@ namespace Invaders.Model
             AddNewInvadersWave();
         }
 
+        /// <summary>
+        /// Fills up invaders collection and calls ShipChanged event for each invader
+        /// </summary>
         private void AddNewInvadersWave()
         {
-            throw new NotImplementedException();
+            int invadersInRowCount = 11;
+
+            for (int i = 0; i < invadersInRowCount; i++)
+                _invaders.Add(new Invader(InvaderType.Spaceship, 50, RandomPointFactory(), Invader.InvaderSize));
+            for (int i = 0; i < invadersInRowCount; i++)
+                _invaders.Add(new Invader(InvaderType.Satellite, 40, RandomPointFactory(), Invader.InvaderSize));
+            for (int i = 0; i < invadersInRowCount; i++)
+                _invaders.Add(new Invader(InvaderType.Saucer, 30, RandomPointFactory(), Invader.InvaderSize));
+            for (int i = 0; i < invadersInRowCount; i++)
+                _invaders.Add(new Invader(InvaderType.Bug, 20, RandomPointFactory(), Invader.InvaderSize));
+            for (int i = 0; i < invadersInRowCount; i++)
+                _invaders.Add(new Invader(InvaderType.Bug, 20, RandomPointFactory(), Invader.InvaderSize));
+            for (int i = 0; i < invadersInRowCount; i++)
+                _invaders.Add(new Invader(InvaderType.Star, 10, RandomPointFactory(), Invader.InvaderSize));
+
+            foreach (Invader invader in _invaders)
+                OnShipChanged(invader, false);
         }
 
         /// <summary>
@@ -174,7 +198,7 @@ namespace Invaders.Model
         {
             for (int i = 0; i < starsAmount; i++)
             {
-                _stars.Add(RandomPointsFactory());
+                _stars.Add(RandomPointFactory());
                 OnStarChanged(_stars.Last(), false);
             }
         }
@@ -183,7 +207,7 @@ namespace Invaders.Model
         /// Creates random point inside game play area
         /// </summary>
         /// <returns>Point inside game area</returns>
-        private Point RandomPointsFactory() //TODO: Move to the helper class
+        private Point RandomPointFactory() //TODO: Move to the helper class
         {
             int epsilon = 0; // Defines minimum distance from play area "frame"
             double x = _random.Next(epsilon,(int)PlayAreaSize.Width-epsilon);
