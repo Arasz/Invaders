@@ -165,26 +165,59 @@ namespace Invaders.Model
             Wave = 0;
             AddNewInvadersWave();
         }
+        /// <summary>
+        /// Ends game
+        /// </summary>
+        public void EndGame()
+        {
+            GameOver = true;
+        }
 
+        /// <summary>
+        /// Fire shot in the invaders
+        /// </summary>
+        public void FireShot()
+        {
+            //Check if there is place for next shot
+            if (MaximumPlayerShots <= _playerShots.Count)
+                return;
+            else
+            {
+                // Add new shot
+                Point shotLocation = new Point(_player.Location.X, _player.Location.Y + Player.PlayerSize.Height/2); 
+                Shot shot = new Shot(shotLocation, Direction.Up);
+                _playerShots.Add(shot);
+                OnShotMoved(shot, false);
+            }
+        }
+
+        #region Private helper methods
+        // TODO: ADD THIS TO HELPER CLASS
         /// <summary>
         /// Fills up invaders collection and calls ShipChanged event for each invader
         /// </summary>
         private void AddNewInvadersWave()
         {
             int invadersInRowCount = 11;
+            double dx = Invader.InvaderSize.Width / 2;
+            double dy = Invader.InvaderSize.Height;
+
+            // Initial coordinates of firs invader;
+            double x =(PlayAreaSize.Width / 2) - (6 * dx); 
+            double y = dy;
 
             for (int i = 0; i < invadersInRowCount; i++)
-                _invaders.Add(new Invader(InvaderType.Spaceship, 50, RandomPointFactory(), Invader.InvaderSize));
+                _invaders.Add(new Invader(InvaderType.Spaceship, 50, new Point((x + i * dx), y), Invader.InvaderSize));
             for (int i = 0; i < invadersInRowCount; i++)
-                _invaders.Add(new Invader(InvaderType.Satellite, 40, RandomPointFactory(), Invader.InvaderSize));
+                _invaders.Add(new Invader(InvaderType.Satellite, 40, new Point((x + i * dx), y+dy), Invader.InvaderSize));
             for (int i = 0; i < invadersInRowCount; i++)
-                _invaders.Add(new Invader(InvaderType.Saucer, 30, RandomPointFactory(), Invader.InvaderSize));
+                _invaders.Add(new Invader(InvaderType.Saucer, 30, new Point((x + i * dx), y + 2* dy), Invader.InvaderSize));
             for (int i = 0; i < invadersInRowCount; i++)
-                _invaders.Add(new Invader(InvaderType.Bug, 20, RandomPointFactory(), Invader.InvaderSize));
+                _invaders.Add(new Invader(InvaderType.Bug, 20, new Point((x + i * dx), y + 4* dy), Invader.InvaderSize));
             for (int i = 0; i < invadersInRowCount; i++)
-                _invaders.Add(new Invader(InvaderType.Bug, 20, RandomPointFactory(), Invader.InvaderSize));
+                _invaders.Add(new Invader(InvaderType.Bug, 20, new Point((x + i * dx), y + 6* dy), Invader.InvaderSize));
             for (int i = 0; i < invadersInRowCount; i++)
-                _invaders.Add(new Invader(InvaderType.Star, 10, RandomPointFactory(), Invader.InvaderSize));
+                _invaders.Add(new Invader(InvaderType.Star, 10, new Point((x + i * dx), y + 8* dy), Invader.InvaderSize));
 
             foreach (Invader invader in _invaders)
                 OnShipChanged(invader, false);
@@ -210,18 +243,11 @@ namespace Invaders.Model
         private Point RandomPointFactory() //TODO: Move to the helper class
         {
             int epsilon = 0; // Defines minimum distance from play area "frame"
-            double x = _random.Next(epsilon,(int)PlayAreaSize.Width-epsilon);
-            double y = _random.Next(epsilon,(int)PlayAreaSize.Height-epsilon);
+            double x = _random.Next(epsilon, (int)PlayAreaSize.Width - epsilon);
+            double y = _random.Next(epsilon, (int)PlayAreaSize.Height - epsilon);
             return new Point(x, y);
         }
-
-        /// <summary>
-        /// Ends game
-        /// </summary>
-        public void EndGame()
-        {
-            GameOver = true;
-        }
+        #endregion
 
     }
 }
