@@ -242,6 +242,7 @@ namespace Invaders.Model
 
                     // Move all shots
                     Rect playAreaRect = new Rect(new Point(0, 0), PlayAreaSize);
+
                     foreach (var shot in _playerShots)
                     {
                         shot.Move();
@@ -259,14 +260,43 @@ namespace Invaders.Model
 
                     //TODO: Invaders are shooting at player
 
+                    // Collisions check 
+                    // At first check for shots which struck into invader ship
+
+                    foreach (Shot playerShot in _playerShots)
+                    {
+                        foreach (Invader invader in _invaders)
+                        {
+                            if (CheckCollision(new Rect(invader.Location, invader.Size), new Rect(playerShot.Location, Shot.ShotSize)))
+                            {
+                                _invaders.Remove(invader);
+                                _playerShots.Remove(playerShot);
+                                break;
+                            }
+                        }
+                    }
+                    // Check if any enemy shot struck player ship
+                    foreach (Shot enemyShot in _invaderShots)
+                    {
+                        if(CheckCollision(_player.Area, new Rect(enemyShot.Location, Shot.ShotSize)))
+                            _playerDied = DateTime.Now;
+                    }
 
                 }
-
             }
         }
 
         #region Private helper methods
         // TODO: ADD THIS TO HELPER CLASS
+
+        private bool CheckCollision(Rect rect1, Rect rect2)
+        {
+            // Check if two rectangles have any common part.
+            rect1.Intersect(rect2);
+            // If two rectangles intersect rect1 has width and height greater than 0
+            return (rect1.Height > 0) && (rect1.Width > 0) ? true : false;
+        }
+
         /// <summary>
         /// Fills up invaders collection and calls ShipChanged event for each invader
         /// </summary>
