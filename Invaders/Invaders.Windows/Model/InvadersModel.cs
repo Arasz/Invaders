@@ -263,9 +263,12 @@ namespace Invaders.Model
                     // Collisions check 
                     // At first check for shots which struck into invader ship
 
-                    foreach (Shot playerShot in _playerShots)
+                    //We are using ToList() to make collection copy. We're iterating through copy
+                    // and we're using remove on the original collection. This prevents the occurrence
+                    // of an exception.
+                    foreach (Shot playerShot in _playerShots.ToList()) 
                     {
-                        foreach (Invader invader in _invaders)
+                        foreach (Invader invader in _invaders.ToList()) 
                         {
                             if (CheckCollision(new Rect(invader.Location, invader.Size), new Rect(playerShot.Location, Shot.ShotSize)))
                             {
@@ -276,10 +279,13 @@ namespace Invaders.Model
                         }
                     }
                     // Check if any enemy shot struck player ship
-                    foreach (Shot enemyShot in _invaderShots)
+                    foreach (Shot enemyShot in _invaderShots.ToList())
                     {
-                        if(CheckCollision(_player.Area, new Rect(enemyShot.Location, Shot.ShotSize)))
+                        if (CheckCollision(_player.Area, new Rect(enemyShot.Location, Shot.ShotSize)))
+                        {
                             _playerDied = DateTime.Now;
+                            _invaderShots.Remove(enemyShot);
+                        }
                     }
 
                 }
