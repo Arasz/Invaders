@@ -226,6 +226,8 @@ namespace Invaders.Model
         /// </summary>
         public void Update()
         {
+            _lastUpdated = DateTime.Now;
+
             Twinkle(); // Stars always twinkle 
             if(!GameOver)
             {
@@ -271,7 +273,9 @@ namespace Invaders.Model
                             if (CheckForInvaderCollision(playerShot, invader))
                             {
                                 _invaders.Remove(invader);
+                                OnShipChanged(invader, true);
                                 _playerShots.Remove(playerShot);
+                                OnShotMoved(playerShot, true);
                                 break;
                             }
                         }
@@ -282,7 +286,9 @@ namespace Invaders.Model
                         if (CheckForPlayerCollision(enemyShot))
                         {
                             _playerDied = DateTime.Now;
+                            OnShipChanged(_player, true);
                             _invaderShots.Remove(enemyShot);
+                            OnShotMoved(enemyShot, true);
                             break;
                         }
                     }
@@ -291,25 +297,68 @@ namespace Invaders.Model
             }
         }
 
+
+        #region Private helper methods
+        // TODO: ADD FEW METHODD TO HELPER CLASS
+
+        /// <summary>
+        /// Moves invaders.
+        /// </summary>
+        /// <remarks>
+        /// Ships are moving from edge to edge of a play area. 
+        /// If they are at the edge, they're moving down. 
+        /// This method should use Move() of each ship. There's also _lastUpdated field
+        /// which can be used to accelerate movement of invaders when their numbers in formation
+        /// will decrease.
+        /// </remarks>
         private void MoveInvaders()
         {
-            //TODO: Implement this method!!
-            // Ships are moving from one edge to the second edge of play area. 
-            // If they are at the edge, they're moving down. 
-            // This method should use Move() of each ship. There's also _lastUpdated field
-            // which can be used to accelerate movement of invaders when their numbers in formation
-            // will decrease. 
-            throw new NotImplementedException();
+            //TODO: Improve this method
+            //ISSUE: Potential issue 
+
+            // Select invaders that are out of the play area
+            var invadersOnEdge =
+                from invader in _invaders
+                where !(new Rect(new Point(0, 0), PlayAreaSize).Contains(invader.Location))
+                select invader;
+            
+            if(invadersOnEdge!=null && invadersOnEdge.Any()&&(!_justMovedDown)) 
+            {
+                // If there is any invader out of the play area move down
+                _justMovedDown = true;
+                foreach (Invader invader in _invaders)
+                {
+                    invader.Move(Direction.Down);
+                    OnShipChanged(invader, false);
+                }
+            }
+            else
+            {
+                _justMovedDown = false;
+                foreach (Invader invader in _invaders)
+                {
+                    invader.Move(_invaderDirection);
+                    OnShipChanged(invader, false);
+                }
+            }
+
+            // Change invader direction
+            if (_justMovedDown && _invaderDirection == Direction.Left)
+                _invaderDirection = Direction.Right;
+            else if (_justMovedDown && _invaderDirection == Direction.Right)
+                _invaderDirection = Direction.Left;
+
+
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void ReturnFire()
         {
             //TODO: Invaders are shooting at player
             throw new NotImplementedException();
         }
-
-        #region Private helper methods
-        // TODO: ADD THIS TO HELPER CLASS
 
         /// <summary>
         /// Checks if shot collides with player
