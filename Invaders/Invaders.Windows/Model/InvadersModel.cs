@@ -352,12 +352,28 @@ namespace Invaders.Model
         }
 
         /// <summary>
-        /// 
+        /// Invaders are shooting at player. There can be max Wave+2 shots in play area;
         /// </summary>
         private void ReturnFire()
         {
-            //TODO: Invaders are shooting at player
-            throw new NotImplementedException();
+            int invadersShots = Wave + 2;
+            int invadersCount = _invaders.Count;
+
+            if (invadersShots>_invaderShots.Count)
+            {
+                Invader invader;
+                Point shotLocation;
+                Shot shot;
+
+                for (int i = 0; i < invadersShots; i++)
+                {
+                    invader = _invaders.ElementAt(_random.Next(0, invadersCount));
+                    shotLocation = new Point(invader.Location.X, invader.Location.Y + invader.Size.Height / 2);
+                    shot = new Shot(shotLocation, Direction.Down);
+                    _invaderShots.Add(shot);
+                    OnShotMoved(_invaderShots.Last(), false);
+                } 
+            }
         }
 
         /// <summary>
