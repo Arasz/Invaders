@@ -163,7 +163,7 @@ namespace Invaders.Model
             _player = new Player(_playerInitialLocation, Player.PlayerSize);
             Lives = 2;
             Wave = 0;
-            AddNewInvadersWave();
+            NextWave();
         }
         /// <summary>
         /// Ends game
@@ -231,14 +231,12 @@ namespace Invaders.Model
             {
                 // Check if there is any invader ship. If not, create new wave
                 if(!_invaders.Any())
-                {
-                    Wave++;
-                    AddNewInvadersWave();
-                }
+                    NextWave();
+
                 // Check if player is alive
                 if(!PlayerDying)
                 {
-                    //TODO: Move invaders ships
+                    MoveInvaders();
 
                     // Move all shots
                     Rect playAreaRect = new Rect(new Point(0, 0), PlayAreaSize);
@@ -258,7 +256,7 @@ namespace Invaders.Model
                         OnShotMoved(shot, false);
                     }
 
-                    //TODO: Invaders are shooting at player
+                    ReturnFire();
 
                     // Collisions check 
                     // At first check for shots which struck into invader ship
@@ -270,7 +268,7 @@ namespace Invaders.Model
                     {
                         foreach (Invader invader in _invaders.ToList()) 
                         {
-                            if (CheckCollision(new Rect(invader.Location, invader.Size), new Rect(playerShot.Location, Shot.ShotSize)))
+                            if (CheckForInvaderCollision(playerShot, invader))
                             {
                                 _invaders.Remove(invader);
                                 _playerShots.Remove(playerShot);
@@ -281,10 +279,11 @@ namespace Invaders.Model
                     // Check if any enemy shot struck player ship
                     foreach (Shot enemyShot in _invaderShots.ToList())
                     {
-                        if (CheckCollision(_player.Area, new Rect(enemyShot.Location, Shot.ShotSize)))
+                        if (CheckForPlayerCollision(enemyShot))
                         {
                             _playerDied = DateTime.Now;
                             _invaderShots.Remove(enemyShot);
+                            break;
                         }
                     }
 
@@ -292,9 +291,54 @@ namespace Invaders.Model
             }
         }
 
+        private void MoveInvaders()
+        {
+            //TODO: Implement this method!!
+            // Ships are moving from one edge to the second edge of play area. 
+            // If they are at the edge, they're moving down. 
+            // This method should use Move() of each ship. There's also _lastUpdated field
+            // which can be used to accelerate movement of invaders when their numbers in formation
+            // will decrease. 
+            throw new NotImplementedException();
+        }
+
+        private void ReturnFire()
+        {
+            //TODO: Invaders are shooting at player
+            throw new NotImplementedException();
+        }
+
         #region Private helper methods
         // TODO: ADD THIS TO HELPER CLASS
 
+        /// <summary>
+        /// Checks if shot collides with player
+        /// </summary>
+        /// <param name="enemyShot"></param>
+        /// <returns>True if there is collision</returns>
+        private bool CheckForPlayerCollision(Shot enemyShot)
+        {
+            return CheckCollision(_player.Area, new Rect(enemyShot.Location, Shot.ShotSize));
+        }
+
+        /// <summary>
+        /// Checks if shot collides with given invader
+        /// </summary>
+        /// <param name="playerShot"></param>
+        /// <param name="invader"></param>
+        /// <returns>True if there is collision</returns>
+        private bool CheckForInvaderCollision(Shot playerShot, Invader invader)
+        {
+            return CheckCollision(new Rect(invader.Location, invader.Size), new Rect(playerShot.Location, Shot.ShotSize));
+        }
+
+
+        /// <summary>
+        /// Checks if two game objects collides with each other.
+        /// </summary>
+        /// <param name="rect1">First rectangle.</param>
+        /// <param name="rect2">Second rectangle.</param>
+        /// <returns>True if objects collides.</returns>
         private bool CheckCollision(Rect rect1, Rect rect2)
         {
             // Check if two rectangles have any common part.
@@ -306,8 +350,10 @@ namespace Invaders.Model
         /// <summary>
         /// Fills up invaders collection and calls ShipChanged event for each invader
         /// </summary>
-        private void AddNewInvadersWave()
+        private void NextWave()
         {
+            // Distance between invaders should be equal to 1.4 invader width/height.
+            Wave++;
             int invadersInRowCount = 11;
             double dx = Invader.InvaderSize.Width / 2;
             double dy = Invader.InvaderSize.Height;
