@@ -69,6 +69,11 @@ namespace Invaders.Model
         private const int _invadersAmount = 66;
 
         /// <summary>
+        /// Time between invaders movement.
+        /// </summary>
+        private readonly TimeSpan _invadersMoveInterval = TimeSpan.FromMilliseconds(500);
+
+        /// <summary>
         /// Player location at the beginning of new game (in the center of play area bottom)
         /// </summary>
         private readonly Point _playerInitialLocation = new Point(150, Player.PlayerSize.Height / 2); //HACK: Redundant variable?
@@ -316,10 +321,19 @@ namespace Invaders.Model
             //TODO: Improve this method
             //ISSUE: Potential issue 
 
-            // Select invaders that are out of the play area
+            // Check if elapsed enough time between invaders move 
+
+            TimeSpan intervalBetweenMoves = DateTime.Now - _lastUpdated;
+            if (intervalBetweenMoves <= _invadersMoveInterval)
+                return;
+
+
+            // Select invaders that are near the play area edge
+            int epsilon = 20; // Distance equal to doubled one time movement of invader
             var invadersOnEdge =
                 from invader in _invaders
-                where !(new Rect(new Point(0, 0), PlayAreaSize).Contains(invader.Location))
+                where (invader.Location.X >= PlayAreaSize.Width - epsilon) || (invader.Location.X <= epsilon)
+                //where !(new Rect(new Point(0, 0), PlayAreaSize).Contains(invader.Location))
                 select invader;
             
             if(invadersOnEdge!=null && invadersOnEdge.Any()&&(!_justMovedDown)) 
