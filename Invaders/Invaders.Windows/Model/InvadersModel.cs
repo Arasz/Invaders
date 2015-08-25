@@ -420,7 +420,7 @@ namespace Invaders.Model
         /// <returns>True if there is collision</returns>
         private bool CheckForInvaderCollision(Shot playerShot, Invader invader)
         {
-            return CheckCollision(new Rect(invader.Location, invader.Size), new Rect(playerShot.Location, Shot.ShotSize));
+            return CheckCollision(invader.Area, new Rect(playerShot.Location, Shot.ShotSize));
         }
 
 
