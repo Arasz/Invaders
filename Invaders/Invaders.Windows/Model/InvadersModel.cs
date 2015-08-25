@@ -304,7 +304,7 @@ namespace Invaders.Model
 
 
         #region Private helper methods
-        // TODO: ADD FEW METHODD TO HELPER CLASS
+        // TODO: ADD FEW METHODS TO HELPER CLASS
 
         /// <summary>
         /// Moves invaders.
@@ -366,22 +366,34 @@ namespace Invaders.Model
         }
 
         /// <summary>
-        /// Invaders are shooting at player. There can be max Wave+2 shots in play area;
+        /// Invaders are shooting at player. There can be max Wave+1 shots in play area;
         /// </summary>
         private void ReturnFire()
         {
-            int invadersShots = Wave + 2;
-            int invadersCount = _invaders.Count;
+            if (_invaders.Count <= 0)
+                return;
 
-            if (invadersShots>_invaderShots.Count)
+            int possibleShots = Wave + 1;
+            int shotsInvadersCanShot = _invaderShots.Count - possibleShots;
+
+            if (shotsInvadersCanShot > 0 && !(_random.Next(10)< 10 - Wave))
             {
-                Invader invader;
                 Point shotLocation;
                 Shot shot;
 
-                for (int i = 0; i < invadersShots; i++)
+                // Select invaders from last row  ( only this invaders can shot)
+
+                var groupedByYPosition =
+                    from invader in _invaders
+                    group invader by invader.Location.Y
+                        into invadersGroups
+                        orderby invadersGroups.Key
+                        select invadersGroups;
+                var bottomInvaders = groupedByYPosition.Last();
+
+                for (int i = 0; i < possibleShots; i++)
                 {
-                    invader = _invaders.ElementAt(_random.Next(0, invadersCount));
+                    Invader invader = bottomInvaders.ElementAt(_random.Next(0, bottomInvaders.Count()));
                     shotLocation = new Point(invader.Location.X, invader.Location.Y + invader.Size.Height / 2);
                     shot = new Shot(shotLocation, Direction.Down);
                     _invaderShots.Add(shot);
