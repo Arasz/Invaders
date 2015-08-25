@@ -297,7 +297,6 @@ namespace Invaders.Model
                             break;
                         }
                     }
-
                 }
             }
         }
@@ -362,6 +361,16 @@ namespace Invaders.Model
             else if (_justMovedDown && _invaderDirection == Direction.Right)
                 _invaderDirection = Direction.Left;
 
+            // Check if there is any invader near the bottom play area edge
+            var invadersAtBottom =
+                from invader in _invaders
+                where invader.Location.Y >= PlayAreaSize.Height
+                select invader;
+            if(invadersAtBottom != null && invadersAtBottom.Any())
+            {
+                EndGame();
+            }
+
 
         }
 
@@ -409,7 +418,7 @@ namespace Invaders.Model
         /// <returns>True if there is collision</returns>
         private bool CheckForPlayerCollision(Shot enemyShot)
         {
-            return CheckCollision(_player.Area, new Rect(enemyShot.Location, Shot.ShotSize));
+            return CollisionHelper.CheckCollision(_player.Area, enemyShot.Location);
         }
 
         /// <summary>
@@ -420,22 +429,7 @@ namespace Invaders.Model
         /// <returns>True if there is collision</returns>
         private bool CheckForInvaderCollision(Shot playerShot, Invader invader)
         {
-            return CheckCollision(invader.Area, new Rect(playerShot.Location, Shot.ShotSize));
-        }
-
-
-        /// <summary>
-        /// Checks if two game objects collides with each other.
-        /// </summary>
-        /// <param name="rect1">First rectangle.</param>
-        /// <param name="rect2">Second rectangle.</param>
-        /// <returns>True if objects collides.</returns>
-        private bool CheckCollision(Rect rect1, Rect rect2)
-        {
-            // Check if two rectangles have any common part.
-            rect1.Intersect(rect2);
-            // If two rectangles intersect rect1 has width and height greater than 0
-            return (rect1.Height > 0) && (rect1.Width > 0) ? true : false;
+            return CollisionHelper.CheckCollision(invader.Area, playerShot.Location);
         }
 
         /// <summary>
