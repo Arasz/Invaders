@@ -1,0 +1,81 @@
+﻿<Page
+    x:Name="pageRoot"
+    x:Class="Invaders.View.InvadersPage"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Invaders.ViewModel"
+    xmlns:common="using:Invaders.Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="using:Invaders.ViewModel"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
+        <x:String x:Key="AppName">Invaders</x:String>
+        <x:String x:Key="GameEnded">Game ended</x:String>
+        <x:String x:Key="GamePaused">Game paused</x:String>
+        
+        <viewmodel:InvadersViewModel x:Name="invadersViewModel"/>
+
+        <Style x:Key="GameStatusTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="FontFamily" Value="System Bold"/>
+            <Setter Property="FontStyle" Value="Normal" />
+        </Style>
+    </Page.Resources>
+
+    <!--
+        This grid acts as a root panel for the page that defines two rows:
+        * Row 0 contains the back button and page title
+        * Row 1 contains the rest of the page layout
+    -->
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Back button and page title -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!--Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                        Style="{StaticResource NavigationBackButtonNormalStyle}"
+                        VerticalAlignment="Top"
+                        AutomationProperties.Name="Back"
+                        AutomationProperties.AutomationId="BackButton"
+                        AutomationProperties.ItemType="Navigation Button"/-->
+            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
+            <StackPanel Orientation="Vertical" Grid.Column="2" Margin="0,0,120,0">
+                <TextBlock Text="bind this"/>
+                <GridView>
+                    <!-- Add binding to lives property. This property must have observable collection<Object> type-->
+                    <DataTemplate>
+                        <Image/>
+                    </DataTemplate>
+                </GridView>
+            </StackPanel>
+        </Grid>
+        <TextBlock Text="{StaticResource GameEnded}" Grid.Row="1" HorizontalAlignment="Center" Visibility="Collapsed"
+                   VerticalAlignment="Center" Style="{StaticResource GameStatusTextBlockStyle}"/>
+        <TextBlock Text="{StaticResource GamePaused}" Grid.Row="1" HorizontalAlignment="Center" Visibility="Collapsed"
+                   VerticalAlignment="Center" Style="{StaticResource GameStatusTextBlockStyle}"/>
+
+        <Border Grid.Row="1" BorderBrush="Blue" BorderThickness="5" CornerRadius="40" Margin="120,0">
+            <ItemsControl>
+                
+            </ItemsControl>
+        </Border>
+    </Grid>
+</Page>
