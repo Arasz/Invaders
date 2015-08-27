@@ -102,5 +102,25 @@ namespace Invaders.View
         }
 
         #endregion
+
+        private void pageRoot_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
+        }
+
+        private void pageRoot_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+
+        }
+
+        private void pageRoot_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
+        {
+
+        }
+
+        private void pageRoot_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+
+        }
     }
 }

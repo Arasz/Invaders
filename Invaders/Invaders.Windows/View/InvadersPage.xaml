@@ -9,7 +9,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodel="using:Invaders.ViewModel"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    SizeChanged="pageRoot_SizeChanged"
+    ManipulationMode="TranslateX"
+    ManipulationDelta="pageRoot_ManipulationDelta"
+    ManipulationCompleted="pageRoot_ManipulationCompleted"
+    Tapped="pageRoot_Tapped"
+    >
 
     <Page.Resources>
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
@@ -73,8 +79,12 @@
                    VerticalAlignment="Center" Style="{StaticResource GameStatusTextBlockStyle}"/>
 
         <Border Grid.Row="1" BorderBrush="Blue" BorderThickness="5" CornerRadius="40" Margin="120,0">
-            <ItemsControl>
-                
+            <ItemsControl DataContext="{StaticResource invadersViewModel}" ItemsSource="{Binding Path=Sprites}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Background="White"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
             </ItemsControl>
         </Border>
     </Grid>
