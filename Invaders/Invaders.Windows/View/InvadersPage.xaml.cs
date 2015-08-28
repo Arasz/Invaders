@@ -105,7 +105,8 @@ namespace Invaders.View
 
         private void pageRoot_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-
+            int gameTitleHeight = 160;
+            UpdatePlayAreaSize(new Size(e.NewSize.Width, e.NewSize.Height - gameTitleHeight));
         }
 
         private void pageRoot_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
@@ -121,6 +122,39 @@ namespace Invaders.View
         private void pageRoot_Tapped(object sender, TappedRoutedEventArgs e)
         {
 
+        }
+
+        private void Border_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdatePlayAreaSize(playArea.RenderSize);
+        }
+
+        /// <summary>
+        /// Updates play are size to conserve 4:3 ratio
+        /// </summary>
+        /// <param name="newPlayAreaSize">New size</param>
+        private void UpdatePlayAreaSize(Size newPlayAreaSize)
+        {
+            double targetWidth, targetHeight;
+
+            if (newPlayAreaSize.Width > newPlayAreaSize.Height)
+            {
+                targetHeight = newPlayAreaSize.Height;
+                targetWidth = newPlayAreaSize.Height * 4 / 3;
+
+                double leftRightMargin = (newPlayAreaSize.Width - targetWidth) / 2;
+                playArea.Margin = new Thickness(leftRightMargin, 0, leftRightMargin, 0);
+            }
+            else
+            {
+                targetHeight = newPlayAreaSize.Width * 3 / 4;
+                targetWidth = newPlayAreaSize.Width;
+                double topBottomMargin = (newPlayAreaSize.Height - targetHeight) / 2;
+                playArea.Margin = new Thickness(0, topBottomMargin, 0, topBottomMargin);
+            }
+            playArea.Width = targetWidth;
+            playArea.Height = targetHeight;
+            invadersViewModel.PlayAreaSize = playArea.RenderSize;
         }
     }
 }

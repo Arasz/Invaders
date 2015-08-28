@@ -78,7 +78,8 @@
         <TextBlock Text="{StaticResource GamePaused}" Grid.Row="1" HorizontalAlignment="Center" Visibility="Collapsed"
                    VerticalAlignment="Center" Style="{StaticResource GameStatusTextBlockStyle}"/>
 
-        <Border Grid.Row="1" BorderBrush="Blue" BorderThickness="5" CornerRadius="40" Margin="120,0">
+        <Border Grid.Row="1" BorderBrush="Blue" BorderThickness="2" CornerRadius="10" Margin="5"
+                x:Name="playArea" Background="Black" Loaded="Border_Loaded">
             <ItemsControl DataContext="{StaticResource invadersViewModel}" ItemsSource="{Binding Path=Sprites}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
