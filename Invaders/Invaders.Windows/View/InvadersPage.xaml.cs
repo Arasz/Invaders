@@ -93,11 +93,15 @@ namespace Invaders.View
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
+            Window.Current.CoreWindow.KeyUp += CoreWindow_KeyUp;
             navigationHelper.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            Window.Current.CoreWindow.KeyDown -= CoreWindow_KeyDown;
+            Window.Current.CoreWindow.KeyUp -= CoreWindow_KeyUp;
             navigationHelper.OnNavigatedFrom(e);
         }
 
@@ -111,22 +115,44 @@ namespace Invaders.View
 
         private void pageRoot_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-
+            if (e.Delta.Translation.X < -1)
+                invadersViewModel.LeftGestureStarted();
+            else if (e.Delta.Translation.X > 1)
+                invadersViewModel.RightGestureStarted();
         }
 
         private void pageRoot_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
         {
-
+            invadersViewModel.GestureCompleted();
         }
 
         private void pageRoot_Tapped(object sender, TappedRoutedEventArgs e)
         {
-
+            invadersViewModel.Tapped();
         }
 
         private void Border_Loaded(object sender, RoutedEventArgs e)
         {
             UpdatePlayAreaSize(playArea.RenderSize);
+        }
+
+        /// <summary>
+        /// Key up event handler
+        /// </summary>
+        /// <param name="sender">Window in which key was released </param>
+        /// <param name="args"></param>
+        private void CoreWindow_KeyUp(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
+        {
+            invadersViewModel.KeyDown(args.VirtualKey);
+        }
+        /// <summary>
+        /// Key down event handler
+        /// </summary>
+        /// <param name="sender">Window in which key was released </param>
+        /// <param name="args"></param>
+        private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
+        {
+            invadersViewModel.KeyUp(args.VirtualKey);
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.Specialized;
 using Windows.Foundation;
+using Windows.System;
 
 namespace Invaders.ViewModel
 {
@@ -28,6 +29,36 @@ namespace Invaders.ViewModel
         public InvadersViewModel()
         {
         
+        }
+
+        internal void KeyDown(VirtualKey virtualKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void KeyUp(VirtualKey virtualKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void LeftGestureStarted()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void RightGestureStarted()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void GestureCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void Tapped()
+        {
+            throw new NotImplementedException();
         }
     }
 }
