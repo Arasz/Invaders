@@ -85,6 +85,9 @@ namespace Invaders.View
             _invaderShotStoryboard.Children.Add(animation);
         }
 
+        /// <summary>
+        /// Creates storyboard which player ship flash animation.
+        /// </summary>
         private void CreateFlashingAnimation()
         {
             _flashStoryboard = new Storyboard();
@@ -111,16 +114,25 @@ namespace Invaders.View
             _flashStoryboard.RepeatBehavior = RepeatBehavior.Forever;
         }
 
+        /// <summary>
+        /// Starts invaders shot animation
+        /// </summary>
         public void InvaderShot()
         {
             _invaderShotStoryboard.Begin();
         }
 
+        /// <summary>
+        /// Starts player flashing animation
+        /// </summary>
         public void StartFlashing()
         {
             _flashStoryboard.Begin();
         }
 
+        /// <summary>
+        /// Stops player flashing animation
+        /// </summary>
         public void StopFlashing()
         {
             _flashStoryboard.Stop();
