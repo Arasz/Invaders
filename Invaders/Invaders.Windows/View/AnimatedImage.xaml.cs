@@ -13,6 +13,9 @@ namespace Invaders.View
     /// </summary>
     public sealed partial class AnimatedImage : UserControl
     {
+        private Storyboard _invaderShotStoryboard;
+        private Storyboard _flashStoryboard;
+
         public AnimatedImage()
         {
             this.InitializeComponent();
@@ -20,6 +23,8 @@ namespace Invaders.View
 
         public AnimatedImage(IEnumerable<string> imageNames, TimeSpan interval)
         {
+            CreateInvaderShotStoryboard();
+            CreateFlashingAnimation();
             StartAnimation(imageNames, interval);
         }
 
@@ -60,6 +65,65 @@ namespace Invaders.View
         private static BitmapImage CreateImageFromAssets(string imageFileName)
         {
             return new BitmapImage(new Uri(string.Format("ms-appx://Assets/{0}", imageFileName)));
+        }
+
+        /// <summary>
+        /// Creates storyboard which contains shot invaders animation 
+        /// </summary>
+        private void CreateInvaderShotStoryboard()
+        {
+            _invaderShotStoryboard = new Storyboard();
+            DoubleAnimation animation = new DoubleAnimation();
+
+            Storyboard.SetTarget(animation, image);
+            Storyboard.SetTargetProperty(animation, nameof(image.Opacity));
+
+            animation.From = 1;
+            animation.To = 0;
+            animation.Duration = TimeSpan.FromSeconds(2);
+
+            _invaderShotStoryboard.Children.Add(animation);
+        }
+
+        private void CreateFlashingAnimation()
+        {
+            _flashStoryboard = new Storyboard();
+            ObjectAnimationUsingKeyFrames animation = new ObjectAnimationUsingKeyFrames();
+            Storyboard.SetTarget(animation, image);
+            Storyboard.SetTargetProperty(animation, nameof(image.Visibility));
+
+            ObjectKeyFrame visibleFrame = new DiscreteObjectKeyFrame()
+            {
+                Value = Windows.UI.Xaml.Visibility.Visible,
+                KeyTime = TimeSpan.FromMilliseconds(0),
+            };
+            ObjectKeyFrame invisibleFrame = new DiscreteObjectKeyFrame()
+            {
+                Value = Windows.UI.Xaml.Visibility.Collapsed,
+                KeyTime = TimeSpan.FromMilliseconds(500),
+            };
+
+            animation.KeyFrames.Add(visibleFrame);
+            animation.KeyFrames.Add(invisibleFrame);
+
+            _flashStoryboard.Children.Add(animation);
+            _flashStoryboard.AutoReverse = true;
+            _flashStoryboard.RepeatBehavior = RepeatBehavior.Forever;
+        }
+
+        public void InvaderShot()
+        {
+            _invaderShotStoryboard.Begin();
+        }
+
+        public void StartFlashing()
+        {
+            _flashStoryboard.Begin();
+        }
+
+        public void StopFlashing()
+        {
+            _flashStoryboard.Stop();
         }
     }
 }
