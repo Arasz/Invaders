@@ -15,6 +15,14 @@ namespace Invaders.View
             this.InitializeComponent();
         }
 
+            
+        public Brush Fill
+        {
+            get { return star.Fill; }
+            set { Fill = value; }
+        }
+
+
         public void SetFill(SolidColorBrush solidColorBrush)
         {
             star.Fill = solidColorBrush;
