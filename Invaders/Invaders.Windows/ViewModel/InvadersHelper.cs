@@ -25,7 +25,7 @@ namespace Invaders.ViewModel
             Array starShapes = Enum.GetValues(typeof(StarShape));
             StarShape randomShape = (StarShape)starShapes.GetValue(_random.Next(0, starShapes.Length));
 
-            UIElement starControl;
+            UIElement starControl; //ISSUE: Is this type good?
 
             switch (randomShape)
             {
