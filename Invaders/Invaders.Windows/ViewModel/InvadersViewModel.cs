@@ -25,6 +25,7 @@ namespace Invaders.ViewModel
         public INotifyCollectionChanged Sprites { get { return _sprites; } }
 
         public Size PlayAreaSize { get; internal set; }
+        public bool Paused { get; internal set; }
 
         public InvadersViewModel()
         {
@@ -57,6 +58,11 @@ namespace Invaders.ViewModel
         }
 
         internal void Tapped()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void StartGame()
         {
             throw new NotImplementedException();
         }

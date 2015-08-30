@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ApplicationSettings;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,6 +28,11 @@ namespace Invaders.View
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+
+        /// <summary>
+        /// Determines if command about is added to options menu
+        /// </summary>
+        static bool aboutCommandAdded = false;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -51,6 +58,49 @@ namespace Invaders.View
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+
+            if(!aboutCommandAdded)
+            {
+                SettingsPane.GetForCurrentView().CommandsRequested += InvadersPage_CommandsRequested;
+                aboutCommandAdded = true;
+            }
+        }
+
+        /// <summary>
+        /// Services event called in settings pane - CommandsRequested
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void InvadersPage_CommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            // Create new delegate type object
+            UICommandInvokedHandler invokedHandler = AboutInvokedHandler;
+            // Create new settings command
+            SettingsCommand aboutCommand = new SettingsCommand("About", "About", invokedHandler);
+            // Add new command
+            args.Request.ApplicationCommands.Add(aboutCommand);
+        }
+
+        /// <summary>
+        /// Called when about command clicked
+        /// </summary>
+        /// <param name="command"></param>
+        private void AboutInvokedHandler(IUICommand command)
+        {
+            invadersViewModel.Paused = true;
+            aboutPopup.IsOpen = true;
+        }
+
+        private void ClosePopup(object sender, RoutedEventArgs e)
+        {
+            aboutPopup.IsOpen = false;
+            invadersViewModel.Paused = false;
+        }
+
+        private void StartButtonClick(object sender, RoutedEventArgs e)
+        {
+            aboutPopup.IsOpen = false;
+            invadersViewModel.StartGame();
         }
 
         /// <summary>
