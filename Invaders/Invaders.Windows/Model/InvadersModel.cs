@@ -73,6 +73,11 @@ namespace Invaders.Model
         /// </summary>
         private readonly TimeSpan _invadersMoveInterval = TimeSpan.FromMilliseconds(500);
 
+        internal void UpdateAllShipsAndStars()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Player location at the beginning of new game (in the center of play area bottom)
         /// </summary>
