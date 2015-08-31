@@ -134,6 +134,7 @@
     <Compile Include="Model\ShotMovedEventArgs.cs" />
     <Compile Include="Model\StarChangedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\BooleanVisibilityConverter.cs" />
     <Compile Include="ViewModel\StarShape.cs" />
     <Compile Include="View\AnimatedImage.xaml.cs">
       <DependentUpon>AnimatedImage.xaml</DependentUpon>

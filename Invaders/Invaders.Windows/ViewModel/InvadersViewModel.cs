@@ -13,6 +13,9 @@ using Windows.System;
 
 namespace Invaders.ViewModel
 {
+    /// <summary>
+    /// Game view model
+    /// </summary>
     class InvadersViewModel
     {
         /// <summary>
