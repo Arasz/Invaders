@@ -59,7 +59,11 @@ namespace Invaders.ViewModel
                 Height = 2,
                 Opacity = 1,
                 MinWidth = width * scale,
-                RenderTransformOrigin = new Windows.Foundation.Point(0, y),
+                RenderTransform = new TranslateTransform()
+                {
+                    X = 0,
+                    Y = y*scale,
+                } 
             };
         }
 
