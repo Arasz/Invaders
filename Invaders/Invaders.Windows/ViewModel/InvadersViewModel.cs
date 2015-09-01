@@ -83,47 +83,137 @@ namespace Invaders.ViewModel
         private bool _playerFlashing = false;
 
         /// <summary>
-        /// Connects invader data model with it representation
+        /// Connects invader data model with it's UI representation
         /// </summary>
         private readonly Dictionary<Invader, FrameworkElement> _invaders =
             new Dictionary<Invader, FrameworkElement>();
+
         private readonly Dictionary<FrameworkElement, DateTime> _shotInvaders =
             new Dictionary<FrameworkElement, DateTime>();
 
+        private readonly Dictionary<Shot, FrameworkElement> _shots =
+            new Dictionary<Shot, FrameworkElement>();
+
+        private readonly Dictionary<Point, FrameworkElement> _stars =
+            new Dictionary<Point, FrameworkElement>();
+
+        private readonly List<FrameworkElement> _scanLines =
+            new List<FrameworkElement>();
+
         public InvadersViewModel()
         {
-        
+            Scale = 1;
+
+            _model.ShipChanged += _model_ShipChanged;
+            _model.ShotMoved += _model_ShotMoved;
+            _model.StarChanged += _model_StarChanged;
+            _timer.Interval = TimeSpan.FromMilliseconds(100);
+            _timer.Tick += _timer_Tick;
+
+            EndGame(); 
         }
+
+        private void EndGame()
+        {
+            throw new NotImplementedException();
+        }
+
+        #region Model class events handlers
+
+        private void _timer_Tick(object sender, object e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void _model_StarChanged(object sender, StarChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void _model_ShotMoved(object sender, ShotMovedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void _model_ShipChanged(object sender, ShipChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region User interaction services
+
+        /// <summary>
+        /// Contains data about time when left button was pressed or left swipe was registered.
+        /// </summary>
+        private DateTime? _leftAction = null;
+        /// <summary>
+        /// Contains data about time when right button was pressed or right swipe was registered.
+        /// </summary>
+        private DateTime? _rightAction = null; 
 
         internal void KeyDown(VirtualKey virtualKey)
         {
-            throw new NotImplementedException();
+            switch (virtualKey)
+            {
+                case VirtualKey.Space:
+                    _model.FireShot();
+                    break;
+                case VirtualKey.Left:
+                    _leftAction = DateTime.Now;
+                    break;
+                case VirtualKey.Right:
+                    _rightAction = DateTime.Now;
+                    break;
+                default:
+                    break;
+            }
         }
 
         internal void KeyUp(VirtualKey virtualKey)
         {
-            throw new NotImplementedException();
+            switch (virtualKey)
+            {
+                case VirtualKey.Left:
+                    _leftAction = null;
+                    break;
+                case VirtualKey.Right:
+                    _rightAction = null;
+                    break;
+                default:
+                    break;
+            }
         }
 
         internal void LeftGestureStarted()
         {
-            throw new NotImplementedException();
+            _leftAction = DateTime.Now;
         }
 
         internal void RightGestureStarted()
         {
-            throw new NotImplementedException();
+            _rightAction = DateTime.Now;
         }
 
         internal void GestureCompleted()
         {
-            throw new NotImplementedException();
+            /// In original code there was a specific method for each direction
+            /// of gesture. But this methods were called at the same time, on 
+            /// manipulation completed event. I decided to make only one method 
+            /// for servicing manipulation completed method.
+            _leftAction = null;
+            _rightAction = null;
         }
 
         internal void Tapped()
         {
-            throw new NotImplementedException();
+            // TODO: Modify this method to avoid shot on the beginning of the game
+            // ( when player clicks start button )
+            _model.FireShot();
         }
+
+
+        #endregion
 
         internal void StartGame()
         {
