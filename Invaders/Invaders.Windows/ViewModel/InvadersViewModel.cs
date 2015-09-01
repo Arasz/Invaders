@@ -21,12 +21,27 @@ namespace Invaders.ViewModel
     /// <summary>
     /// Game view model
     /// </summary>
-    class InvadersViewModel
+    class InvadersViewModel : INotifyPropertyChanged
     {
+        #region Events
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            var propertyChangedEventHandler = PropertyChanged;
+
+            // Elvis operator ( if( a != null) a.Invoke() )
+            propertyChangedEventHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+
         /// <summary>
         /// Stores elements displayed on play area.
         /// </summary>
-        private readonly ObservableCollection<FrameworkElement> _sprites = new ObservableCollection<FrameworkElement>();
+        private readonly ObservableCollection<FrameworkElement> _sprites = 
+            new ObservableCollection<FrameworkElement>();
         /// <summary>
         /// Provides possibility to subscribe collection of sprites event CollectionChanged
         /// </summary>
@@ -88,6 +103,9 @@ namespace Invaders.ViewModel
         private readonly Dictionary<Invader, FrameworkElement> _invaders =
             new Dictionary<Invader, FrameworkElement>();
 
+        /// <summary>
+        /// Connects time of begin shot and shot invader
+        /// </summary>
         private readonly Dictionary<FrameworkElement, DateTime> _shotInvaders =
             new Dictionary<FrameworkElement, DateTime>();
 
@@ -113,6 +131,28 @@ namespace Invaders.ViewModel
             EndGame(); 
         }
 
+        /// <summary>
+        /// Starts game
+        /// </summary>
+        /// <remarks>
+        /// Deletes all invaders ships and shots from sprite collection, starts timer and
+        /// informs model about game start 
+        /// </remarks>
+        private void StartGame()
+        {
+            Paused = false;
+            foreach (var invader in _invaders.Values)
+                _sprites.Remove(invader);
+            foreach (var shot in _shots.Values)
+                _sprites.Remove(shot);
+            _model.StartGame();
+            OnPropertyChanged(nameof(GameOver));
+            _timer.Start();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         private void EndGame()
         {
             throw new NotImplementedException();
@@ -150,7 +190,7 @@ namespace Invaders.ViewModel
         /// <summary>
         /// Contains data about time when right button was pressed or right swipe was registered.
         /// </summary>
-        private DateTime? _rightAction = null; 
+        private DateTime? _rightAction = null;
 
         internal void KeyDown(VirtualKey virtualKey)
         {
@@ -215,14 +255,23 @@ namespace Invaders.ViewModel
 
         #endregion
 
-        internal void StartGame()
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// Creates simulated horizontal noise lines from old TV 
+        /// </summary>
         private void RecreateScanLines()
         {
-            throw new NotImplementedException();
+            // Remove scan lines from game screen
+            foreach (FrameworkElement scanLIne in _scanLines)
+            {
+                if (_sprites.Contains(scanLIne))
+                    _sprites.Remove(scanLIne);
+            }
+            _scanLines.Clear();
+
+            for (int y = 0; y < 300; y+=2)
+            {
+                FrameworkElement scanLine = InvadersHelper.ScanLineFactory(y, 400, Scale);
+            }
         }
     }
 }

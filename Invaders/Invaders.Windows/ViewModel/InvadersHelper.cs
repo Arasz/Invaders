@@ -51,13 +51,15 @@ namespace Invaders.ViewModel
             return starControl;
         }
 
-        static public Rectangle ScanLineFactory(double scale)
+        static public Rectangle ScanLineFactory(double y, double width, double scale)
         {
             return new Rectangle()
             {
                 Fill = new SolidColorBrush(Colors.White),
                 Height = 2,
                 Opacity = 1,
+                MinWidth = width * scale,
+                RenderTransformOrigin = new Windows.Foundation.Point(0, y),
             };
         }
 
