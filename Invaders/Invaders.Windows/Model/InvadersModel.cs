@@ -73,11 +73,6 @@ namespace Invaders.Model
         /// </summary>
         private readonly TimeSpan _invadersMoveInterval = TimeSpan.FromMilliseconds(500);
 
-        internal void UpdateAllShipsAndStars()
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Player location at the beginning of new game (in the center of play area bottom)
         /// </summary>
@@ -304,6 +299,21 @@ namespace Invaders.Model
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Updates all ships and stars
+        /// </summary>
+        internal void UpdateAllShipsAndStars()
+        {
+            OnShipChanged(_player, false);
+
+            foreach (var invader in _invaders)
+                OnShipChanged(invader, false);
+
+            foreach (var star in _stars)
+                OnStarChanged(star, false);
+
         }
 
 

@@ -64,6 +64,7 @@ namespace Invaders.ViewModel
                     X = 0,
                     Y = y*scale,
                 } 
+                // ISSUE: Should I use Canvas.SetTop itp. ? This will work? 
             };
         }
 
